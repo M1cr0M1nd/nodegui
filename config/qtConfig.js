@@ -53,7 +53,7 @@ function getMiniQtConfig() {
         case 'win32': {
             const qtHome = path.resolve(SETUP_DIR);
             const packageVersion = packageJson.version;
-            const tarballName = `Qt-v5.15.2-${os.platform()}-${os.arch()}.tar.gz`;
+            const tarballName = `Qt-v5.15.2-${os.platform()}-${os.arch()}.7z`;
         
             return {
                 qtHome,
