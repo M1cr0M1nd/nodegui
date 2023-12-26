@@ -23,7 +23,7 @@ Napi::Value keys(const Napi::CallbackInfo& info) {
   QStringList keys = QStyleFactory::keys();
   Napi::Array keysNapi = Napi::Array::New(env, keys.size());
   for (int i = 0; i < keys.size(); i++) {
-    keysNapi[i] = Napi::String::New(env, keys[i].toStdString());
+    keysNapi.Set(i, Napi::String::New(env, keys[i].toStdString()));
   }
   return keysNapi;
 }

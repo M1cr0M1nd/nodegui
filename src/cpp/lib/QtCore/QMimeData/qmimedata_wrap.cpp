@@ -163,8 +163,9 @@ Napi::Value QMimeDataWrap::setUrls(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
   Napi::Array urls = info[0].As<Napi::Array>();
   QList<QUrl> list;
-  for (int i = 0; i < urls.Length(); i++) {
-    Napi::Object urlObj = static_cast<Napi::Value>(urls[i]).As<Napi::Object>();
+  for (uint32_t i = 0; i < urls.Length(); i++) {
+    Napi::Value urlValue = urls.Get(i);
+    Napi::Object urlObj = urlValue.As<Napi::Object>();
     QUrlWrap* urlWrap = Napi::ObjectWrap<QUrlWrap>::Unwrap(urlObj);
     QUrl* url = urlWrap->getInternalInstance();
     list.append(*url);
@@ -187,7 +188,7 @@ Napi::Value QMimeDataWrap::urls(const Napi::CallbackInfo& info) {
     QUrl url = urls[i];
     auto instance = QUrlWrap::constructor.New(
         {Napi::External<QUrl>::New(env, new QUrl(url))});
-    retval[i] = instance;
+    retval.Set(i, instance);
   }
   return retval;
 }

@@ -48,7 +48,7 @@ Napi::Value QFontDatabaseWrap::families(const Napi::CallbackInfo& info) {
       static_cast<QFontDatabase::WritingSystem>(writingSystem));
   Napi::Array familiesNapi = Napi::Array::New(env, families.size());
   for (int i = 0; i < families.size(); i++) {
-    familiesNapi[i] = Napi::String::New(env, families[i].toStdString());
+    familiesNapi.Set(i, Napi::String::New(env, families[i].toStdString()));
   }
 
   return familiesNapi;
@@ -92,11 +92,10 @@ Napi::Value QFontDatabaseWrap::styles(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   std::string family = info[0].As<Napi::String>().Utf8Value();
-  QStringList styles =
-      this->instance->styles(QString::fromUtf8(family.c_str()));
+  QStringList styles = this->instance->styles(QString::fromUtf8(family.c_str()));
   Napi::Array stylesNapi = Napi::Array::New(env, styles.size());
   for (int i = 0; i < styles.size(); i++) {
-    stylesNapi[i] = Napi::String::New(env, styles[i].toStdString());
+    stylesNapi.Set(i, Napi::String::New(env, styles[i].toStdString()));
   }
   return stylesNapi;
 }
@@ -129,7 +128,7 @@ Napi::Value StaticQFontDatabaseWrapMethods::applicationFontFamilies(
 
   for (int i = 0; i < keys.size(); i++) {
     Napi::Value value = Napi::String::New(env, keys.at(i).toUtf8().constData());
-    js_array[i] = value;
+    js_array.Set(i, value);
   }
 
   return js_array;

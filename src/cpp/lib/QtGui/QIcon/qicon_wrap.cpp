@@ -109,15 +109,13 @@ Napi::Value QIconWrap::addPixmap(const Napi::CallbackInfo& info) {
 
 Napi::Value QIconWrap::availableSizes(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
-  QIcon::Mode mode =
-      static_cast<QIcon::Mode>(info[0].As<Napi::Number>().Int32Value());
-  QIcon::State state =
-      static_cast<QIcon::State>(info[1].As<Napi::Number>().Int32Value());
+  QIcon::Mode mode = static_cast<QIcon::Mode>(info[0].As<Napi::Number>().Int32Value());
+  QIcon::State state = static_cast<QIcon::State>(info[1].As<Napi::Number>().Int32Value());
   QList<QSize> result = this->instance->availableSizes(mode, state);
   Napi::Array resultArrayNapi = Napi::Array::New(env, result.size());
   for (int i = 0; i < result.size(); i++) {
-    resultArrayNapi[i] = QSizeWrap::constructor.New(
-        {Napi::External<QSize>::New(env, new QSize(result[i]))});
+    resultArrayNapi.Set(i, QSizeWrap::constructor.New(
+        {Napi::External<QSize>::New(env, new QSize(result[i]))}));
   }
   return resultArrayNapi;
 }

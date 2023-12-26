@@ -76,8 +76,8 @@ QTreeWidgetItemWrap::QTreeWidgetItemWrap(const Napi::CallbackInfo &info)
     if (info.Length() == 3) {
       Napi::Array stringsNapi = info[1].As<Napi::Array>();
       QList<QString> list;
-      for (int i = 0; i < stringsNapi.Length(); i++) {
-        Napi::Value stringNapi = stringsNapi[i];
+      for (int32_t i = 0; i < stringsNapi.Length(); i++) {
+        Napi::Value stringNapi = stringsNapi.Get(i);
         list.append(stringNapi.As<Napi::String>().Utf8Value().c_str());
       }
       QStringList strings = QStringList(list);
@@ -120,8 +120,8 @@ QTreeWidgetItemWrap::QTreeWidgetItemWrap(const Napi::CallbackInfo &info)
     } else if (info.Length() == 1) {
       Napi::Array stringsNapi = info[0].As<Napi::Array>();
       QList<QString> list;
-      for (int i = 0; i < stringsNapi.Length(); i++) {
-        Napi::Value stringNapi = stringsNapi[i];
+      for (int32_t i = 0; i < stringsNapi.Length(); i++) {
+        Napi::Value stringNapi = stringsNapi.Get(i);
         list.append(stringNapi.As<Napi::String>().Utf8Value().c_str());
       }
       QStringList strings = QStringList(list);

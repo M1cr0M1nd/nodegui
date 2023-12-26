@@ -453,7 +453,7 @@ void QImageWrap::setColorCount(const Napi::CallbackInfo& info) {
 
 void QImageWrap::setDevicePixelRatio(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
-  int64_t scaleFactor = info[0].As<Napi::Number>();
+  qreal scaleFactor = info[0].As<Napi::Number>();
   this->instance->setDevicePixelRatio(scaleFactor);
 }
 
@@ -557,7 +557,7 @@ Napi::Value QImageWrap::textKeys(const Napi::CallbackInfo& info) {
 
   for (int i = 0; i < keys.size(); i++) {
     Napi::Value value = Napi::String::New(env, keys.at(i).toUtf8().constData());
-    js_array[i] = value;
+    js_array.Set(i, value);
   }
 
   return js_array;

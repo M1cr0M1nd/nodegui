@@ -90,10 +90,9 @@ Napi::Value QListWidgetWrap::addItems(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
   Napi::Array labelsNapi = info[0].As<Napi::Array>();
   QStringList labels;
-  for (int i = 0; i < labelsNapi.Length(); i++) {
-    Napi::Value labelNapi = labelsNapi[i];
-    labels.append(
-        QString::fromUtf8(labelNapi.As<Napi::String>().Utf8Value().c_str()));
+  for (uint32_t i = 0; i < labelsNapi.Length(); i++) {
+    Napi::Value labelNapi = labelsNapi.Get(i);
+    labels.append(QString::fromUtf8(labelNapi.As<Napi::String>().Utf8Value().c_str()));
   }
   this->instance->addItems(labels);
   return env.Null();
@@ -141,7 +140,7 @@ Napi::Value QListWidgetWrap::findItems(const Napi::CallbackInfo& info) {
     auto instance = QListWidgetItemWrap::constructor.New(
         {Napi::External<QListWidgetItem>::New(env, item),
          Napi::Boolean::New(env, true)});
-    napiItems[i] = instance;
+    napiItems.Set(i, instance);
   }
   return napiItems;
 }
@@ -161,10 +160,9 @@ Napi::Value QListWidgetWrap::insertItems(const Napi::CallbackInfo& info) {
   int row = info[0].As<Napi::Number>().Int32Value();
   Napi::Array labelsNapi = info[1].As<Napi::Array>();
   QStringList labels;
-  for (int i = 0; i < labelsNapi.Length(); i++) {
-    Napi::Value labelNapi = labelsNapi[i];
-    labels.append(
-        QString::fromUtf8(labelNapi.As<Napi::String>().Utf8Value().c_str()));
+  for (uint32_t i = 0; i < labelsNapi.Length(); i++) {
+    Napi::Value labelNapi = labelsNapi.Get(i);
+    labels.append(QString::fromUtf8(labelNapi.As<Napi::String>().Utf8Value().c_str()));
   }
   this->instance->insertItems(row, labels);
   return env.Null();
@@ -252,7 +250,7 @@ Napi::Value QListWidgetWrap::selectedItems(const Napi::CallbackInfo& info) {
     auto instance = QListWidgetItemWrap::constructor.New(
         {Napi::External<QListWidgetItem>::New(env, item),
          Napi::Boolean::New(env, true)});
-    napiItems[i] = instance;
+    napiItems.Set(i, instance);
   }
   return napiItems;
 }

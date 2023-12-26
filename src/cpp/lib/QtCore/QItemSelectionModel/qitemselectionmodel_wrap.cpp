@@ -203,8 +203,8 @@ Napi::Value QItemSelectionModelWrap::selectedColumns(
   QModelIndexList result = this->instance->selectedColumns(row);
   Napi::Array resultArrayNapi = Napi::Array::New(env, result.size());
   for (int i = 0; i < result.size(); i++) {
-    resultArrayNapi[i] = QModelIndexWrap::constructor.New(
-        {Napi::External<QModelIndex>::New(env, new QModelIndex(result[i]))});
+    resultArrayNapi.Set(i, QModelIndexWrap::constructor.New(
+        {Napi::External<QModelIndex>::New(env, new QModelIndex(result[i]))}));
   }
   return resultArrayNapi;
 }
@@ -215,8 +215,8 @@ Napi::Value QItemSelectionModelWrap::selectedIndexes(
   QModelIndexList result = this->instance->selectedIndexes();
   Napi::Array resultArrayNapi = Napi::Array::New(env, result.size());
   for (int i = 0; i < result.size(); i++) {
-    resultArrayNapi[i] = QModelIndexWrap::constructor.New(
-        {Napi::External<QModelIndex>::New(env, new QModelIndex(result[i]))});
+    resultArrayNapi.Set(i, QModelIndexWrap::constructor.New(
+        {Napi::External<QModelIndex>::New(env, new QModelIndex(result[i]))}));
   }
   return resultArrayNapi;
 }
@@ -228,8 +228,8 @@ Napi::Value QItemSelectionModelWrap::selectedRows(
   QModelIndexList result = this->instance->selectedRows(column);
   Napi::Array resultArrayNapi = Napi::Array::New(env, result.size());
   for (int i = 0; i < result.size(); i++) {
-    resultArrayNapi[i] = QModelIndexWrap::constructor.New(
-        {Napi::External<QModelIndex>::New(env, new QModelIndex(result[i]))});
+    resultArrayNapi.Set(i, QModelIndexWrap::constructor.New(
+        {Napi::External<QModelIndex>::New(env, new QModelIndex(result[i]))}));
   }
   return resultArrayNapi;
 }

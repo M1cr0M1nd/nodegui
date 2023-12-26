@@ -115,12 +115,12 @@
     QObjectList children = this->instance->children();                       \
     Napi::Array resultArrayNapi = Napi::Array::New(env, children.size());    \
     for (int i = 0; i < children.size(); i++) {                              \
-      resultArrayNapi[i] =                                                   \
-          WrapperCache::instance.getWrapper(env, children[i]);               \
+      resultArrayNapi.Set(                                                   \
+        i, WrapperCache::instance.getWrapper(env, children[i]));             \
     }                                                                        \
     return resultArrayNapi;                                                  \
   }
-
+// MIKE EDITED -^
 // Ideally this macro below should go in
 // QOBJECT_WRAPPED_METHODS_DECLARATION_WITH_EVENT_SOURCE but some wrappers
 // need their own setParent()` implementation which handles different

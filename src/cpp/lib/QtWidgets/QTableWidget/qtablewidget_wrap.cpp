@@ -157,10 +157,9 @@ Napi::Value QTableWidgetWrap::selectedRanges(const Napi::CallbackInfo& info) {
     newRange.Set("rightColumn", Napi::Number::New(env, rightColumn));
     newRange.Set("columnCount", Napi::Number::New(env, columnCount));
     newRange.Set("rowCount", Napi::Number::New(env, rowCount));
-    napiRange[i] = newRange;
+    napiRange.Set(i, newRange);
   }
   return napiRange;
-  return env.Null();
 }
 
 Napi::Value QTableWidgetWrap::closePersistentEditor(
@@ -225,12 +224,11 @@ Napi::Value QTableWidgetWrap::setHorizontalHeaderLabels(
     const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
   Napi::Array labelsNapi = info[0].As<Napi::Array>();
-  QList<QString> list;
-  for (int i = 0; i < labelsNapi.Length(); i++) {
-    Napi::Value labelNapi = labelsNapi[i];
-    list.append(labelNapi.As<Napi::String>().Utf8Value().c_str());
+  QStringList labels;
+  for (uint32_t i = 0; i < labelsNapi.Length(); i++) {
+    Napi::Value labelNapi = labelsNapi.Get(i);
+    labels.append(QString::fromUtf8(labelNapi.As<Napi::String>().Utf8Value().c_str()));
   }
-  QStringList labels = QStringList(list);
 
   this->instance->setHorizontalHeaderLabels(labels);
   return env.Null();
@@ -252,12 +250,11 @@ Napi::Value QTableWidgetWrap::setVerticalHeaderLabels(
     const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
   Napi::Array labelsNapi = info[0].As<Napi::Array>();
-  QList<QString> list;
-  for (int i = 0; i < labelsNapi.Length(); i++) {
-    Napi::Value labelNapi = labelsNapi[i];
-    list.append(labelNapi.As<Napi::String>().Utf8Value().c_str());
+  QStringList labels;
+  for (uint32_t i = 0; i < labelsNapi.Length(); i++) {
+    Napi::Value labelNapi = labelsNapi.Get(i);
+    labels.append(QString::fromUtf8(labelNapi.As<Napi::String>().Utf8Value().c_str()));
   }
-  QStringList labels = QStringList(list);
 
   this->instance->setVerticalHeaderLabels(labels);
   return env.Null();
@@ -372,7 +369,7 @@ Napi::Value QTableWidgetWrap::findItems(const Napi::CallbackInfo& info) {
     auto instance = QTableWidgetItemWrap::constructor.New(
         {Napi::External<QTableWidgetItem>::New(env, item),
          Napi::Boolean::New(env, true)});
-    napiItems[i] = instance;
+    napiItems.Set(i, instance);
   }
   return napiItems;
 }

@@ -178,7 +178,7 @@ Napi::Value StaticQApplicationWrapMethods::screens(
   for (int i = 0; i < screens.size(); i++) {
     QScreen* screen = screens[i];
     auto instance = WrapperCache::instance.getWrapper(env, screen, true);
-    jsArray[i] = instance;
+    jsArray.Set(i, instance);
   }
   return jsArray;
 }

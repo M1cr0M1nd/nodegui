@@ -138,7 +138,7 @@ Napi::Value QAbstractItemModelWrap::emitDataChanged(
   Napi::Array rolesNapi = info[2].As<Napi::Array>();
   QVector<int> roles(rolesNapi.Length());
   for (int i = 0; i < rolesNapi.Length(); i++) {
-    Napi::Value numberNapi = rolesNapi[i];
+    Napi::Value numberNapi = rolesNapi.Get(i);
     roles.append(numberNapi.As<Napi::Number>().Int32Value());
   }
 

@@ -123,7 +123,7 @@ Napi::Value QButtonGroupWrap::buttons(const Napi::CallbackInfo& info) {
   for (int i = 0; i < items.size(); i++) {
     QAbstractButton* item = items[i];
     auto value = Napi::External<QAbstractButton>::New(env, item);
-    napiItems[i] = value;
+    napiItems.Set(i, value);
   }
 
   return napiItems;

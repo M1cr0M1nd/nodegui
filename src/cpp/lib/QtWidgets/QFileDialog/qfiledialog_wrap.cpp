@@ -64,7 +64,7 @@ Napi::Value QFileDialogWrap::supportedSchemes(const Napi::CallbackInfo& info) {
   QStringList schemes = this->instance->supportedSchemes();
   Napi::Array schemesNapi = Napi::Array::New(env, schemes.size());
   for (int i = 0; i < schemes.size(); i++) {
-    schemesNapi[i] = Napi::String::New(env, schemes[i].toStdString());
+    schemesNapi.Set(i, Napi::String::New(env, schemes[i].toStdString()));
   }
 
   return schemesNapi;
@@ -74,12 +74,11 @@ Napi::Value QFileDialogWrap::setSupportedSchemes(
     const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
   Napi::Array schemesNapi = info[0].As<Napi::Array>();
-  QList<QString> list;
-  for (int i = 0; i < schemesNapi.Length(); i++) {
-    Napi::Value schemeNapi = schemesNapi[i];
-    list.append(schemeNapi.As<Napi::String>().Utf8Value().c_str());
+  QStringList schemes;
+  for (uint32_t i = 0; i < schemesNapi.Length(); i++) {
+    Napi::Value schemeNapi = schemesNapi.Get(i);
+    schemes.append(QString::fromUtf8(schemeNapi.As<Napi::String>().Utf8Value().c_str()));
   }
-  QStringList schemes = QStringList(list);
 
   this->instance->setSupportedSchemes(schemes);
   return env.Null();
@@ -130,7 +129,7 @@ Napi::Value QFileDialogWrap::selectedFiles(const Napi::CallbackInfo& info) {
   QStringList files = this->instance->selectedFiles();
   Napi::Array fileList = Napi::Array::New(env, files.size());
   for (int i = 0; i < files.size(); i++) {
-    fileList[i] = Napi::String::New(env, files[i].toStdString());
+    fileList.Set(i, Napi::String::New(env, files[i].toStdString()));
   }
   return fileList;
 }

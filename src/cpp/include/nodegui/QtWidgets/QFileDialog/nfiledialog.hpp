@@ -56,17 +56,18 @@ class DLL_EXPORT NFileDialog : public QFileDialog, public NodeWidget {
           this->emitOnNode.Call({Napi::String::New(env, "fileSelected"),
                                  Napi::String::New(env, file.toStdString())});
         });
-    QObject::connect(
-        this, &QFileDialog::filesSelected, [=](const QStringList &selected) {
-          Napi::Env env = this->emitOnNode.Env();
-          Napi::HandleScope scope(env);
-          Napi::Array selectedNapi = Napi::Array::New(env, selected.size());
-          for (int i = 0; i < selected.size(); i++) {
-            selectedNapi[i] = Napi::String::New(env, selected[i].toStdString());
-          }
-          this->emitOnNode.Call(
-              {Napi::String::New(env, "filesSelected"), selectedNapi});
-        });
+      QObject::connect(
+          this, &QFileDialog::filesSelected, [=](const QStringList &selected) {
+            Napi::Env env = this->emitOnNode.Env();
+            Napi::HandleScope scope(env);
+            Napi::Array selectedNapi = Napi::Array::New(env, selected.size());
+            for (int i = 0; i < selected.size(); i++) {
+              selectedNapi.Set(static_cast<uint32_t>(i), Napi::String::New(env, selected[i].toStdString()));
+            }
+            this->emitOnNode.Call(
+                {Napi::String::New(env, "filesSelected"), selectedNapi});
+          });
+
 
     QObject::connect(
         this, &QFileDialog::filterSelected, [=](const QString &filter) {
@@ -85,16 +86,16 @@ class DLL_EXPORT NFileDialog : public QFileDialog, public NodeWidget {
     });
 
     QObject::connect(
-        this, &QFileDialog::urlsSelected, [=](const QList<QUrl> &urls) {
-          Napi::Env env = this->emitOnNode.Env();
-          Napi::HandleScope scope(env);
-          Napi::Array urlsNapi = Napi::Array::New(env, urls.size());
-          for (int i = 0; i < urls.size(); i++) {
-            urlsNapi[i] =
-                Napi::String::New(env, urls[i].toString().toStdString());
-          }
-          this->emitOnNode.Call(
-              {Napi::String::New(env, "urlsSelected"), urlsNapi});
-        });
+      this, &QFileDialog::urlsSelected, [=](const QList<QUrl> &urls) {
+        Napi::Env env = this->emitOnNode.Env();
+        Napi::HandleScope scope(env);
+        Napi::Array urlsNapi = Napi::Array::New(env, urls.size());
+        for (int i = 0; i < urls.size(); i++) {
+          urlsNapi.Set(static_cast<uint32_t>(i), Napi::String::New(env, urls[i].toString().toStdString()));
+        }
+        this->emitOnNode.Call(
+            {Napi::String::New(env, "urlsSelected"), urlsNapi});
+      });
+
   }
 };

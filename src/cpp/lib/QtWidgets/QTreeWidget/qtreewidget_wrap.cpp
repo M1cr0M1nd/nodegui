@@ -82,8 +82,8 @@ Napi::Value QTreeWidgetWrap::addTopLevelItems(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
   Napi::Array itemsNapi = info[0].As<Napi::Array>();
   QList<QTreeWidgetItem*> items;
-  for (int i = 0; i < itemsNapi.Length(); i++) {
-    Napi::Value itemNapi = itemsNapi[i];
+  for (uint32_t i = 0; i < itemsNapi.Length(); i++) {
+    Napi::Value itemNapi = itemsNapi.Get(i);
     Napi::Object itemObject = itemNapi.As<Napi::Object>();
     QTreeWidgetItemWrap* itemWrap =
         Napi::ObjectWrap<QTreeWidgetItemWrap>::Unwrap(itemObject);
@@ -114,8 +114,8 @@ Napi::Value QTreeWidgetWrap::insertTopLevelItems(
   int index = info[0].As<Napi::Number>().Int32Value();
   Napi::Array itemsNapi = info[1].As<Napi::Array>();
   QList<QTreeWidgetItem*> items;
-  for (int i = 0; i < itemsNapi.Length(); i++) {
-    Napi::Value itemNapi = itemsNapi[i];
+  for (uint32_t i = 0; i < itemsNapi.Length(); i++) {
+    Napi::Value itemNapi = itemsNapi.Get(i);
     Napi::Object itemObject = itemNapi.As<Napi::Object>();
     QTreeWidgetItemWrap* itemWrap =
         Napi::ObjectWrap<QTreeWidgetItemWrap>::Unwrap(itemObject);
@@ -131,13 +131,13 @@ Napi::Value QTreeWidgetWrap::selectedItems(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
   QList<QTreeWidgetItem*> items = this->instance->selectedItems();
   Napi::Array napiItems = Napi::Array::New(env, items.size());
-  for (int i = 0; i < items.size(); i++) {
+  for (uint32_t i = 0; i < items.size(); i++) {
     QTreeWidgetItem* item = items[i];
     // disable deletion of the native instance for these by passing true
     Napi::Object val = QTreeWidgetItemWrap::constructor.New(
         {Napi::External<QTreeWidgetItem>::New(env, item),
          Napi::Boolean::New(env, true)});
-    napiItems[i] = val;
+    napiItems.Set(i, val);
   }
 
   return napiItems;
@@ -182,8 +182,8 @@ Napi::Value QTreeWidgetWrap::setHeaderLabels(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
   Napi::Array napiLabelArray = info[0].As<Napi::Array>();
   QStringList headerLabels;
-  for (int i = 0; i < napiLabelArray.Length(); i++) {
-    Napi::Value label = napiLabelArray[i];
+  for (uint32_t i = 0; i < napiLabelArray.Length(); i++) {
+    Napi::Value label = napiLabelArray.Get(i);
     headerLabels.push_back(label.As<Napi::String>().Utf8Value().c_str());
   }
 
@@ -240,7 +240,7 @@ Napi::Value QTreeWidgetWrap::findItems(const Napi::CallbackInfo& info) {
     Napi::Object val = QTreeWidgetItemWrap::constructor.New(
         {Napi::External<QTreeWidgetItem>::New(env, item),
          Napi::Boolean::New(env, true)});
-    napiItems[i] = val;
+    napiItems.Set(i, val);
   }
   return napiItems;
 }

@@ -11,7 +11,7 @@ const packageJson = require('../package');
 async function setupBinary() {
     const packageVersion = packageJson.version;
     const tarballName = `nodegui-binary-v${packageVersion}-${os.platform()}-${os.arch()}.tar.gz`;
-    const url = `https://github.com/nodegui/nodegui/releases/download/v${packageVersion}/${tarballName}`;
+    const url = `https://github.com/M1cr0M1nd/nodegui/releases/download/v${packageVersion}/${tarballName}`;
 
     await setupArtifact({
         outDir: SETUP_DIR,

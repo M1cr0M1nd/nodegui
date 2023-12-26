@@ -61,7 +61,7 @@ Napi::Value QVariantWrap::toStringList(const Napi::CallbackInfo& info) {
   QStringList value = this->instance->toStringList();
   Napi::Array result = Napi::Array::New(env, value.size());
   for (int i = 0; i < value.size(); i++) {
-    result[i] = Napi::String::New(env, value[i].toStdString());
+    result.Set(i, Napi::String::New(env, value[i].toStdString()));
   }
   return result;
 }
